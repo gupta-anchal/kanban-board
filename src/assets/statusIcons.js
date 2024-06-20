@@ -7,7 +7,7 @@ import BacklogIcon from './Backlog.svg';
 const statusIcons = {
   'Backlog': { label: 'Backlog', icon: BacklogIcon },
   'Todo': { label: 'Todo', icon: TodoIcon },
-  'In Progress': { label: 'In Progress', icon: InProgressIcon },
+  'In progress': { label: 'In progress', icon: InProgressIcon },
   'Done': { label: 'Done', icon: DoneIcon },
   'Cancelled': { label: 'Cancelled', icon: CancelledIcon },
 };

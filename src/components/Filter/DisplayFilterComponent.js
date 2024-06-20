@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DisplayIcon from '../../assets/Display.svg';
 import '../../styles/dispayFilter.css';
 
@@ -6,11 +6,25 @@ const DisplayFilterComponent = ({ setGrouping, setSorting }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [grouping, setLocalGrouping] = useState(localStorage.getItem('grouping') || 'status');
   const [sorting, setLocalSorting] = useState(localStorage.getItem('sorting') || 'priority');
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     setGrouping(grouping);
     setSorting(sorting);
   }, [grouping, sorting, setGrouping, setSorting]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -30,14 +44,13 @@ const DisplayFilterComponent = ({ setGrouping, setSorting }) => {
     setSorting(newSorting);
   };
 
-
   return (
     <div className="display-filter-component">
       <button onClick={handleToggle} className="display-button">
         <img src={DisplayIcon} alt="Display" /> Display
       </button>
       {isOpen && (
-        <div className="dropdown">
+        <div className="dropdown" ref={dropdownRef}>
           <div className="dropdown-group">
             <label>Grouping</label>
             <select onChange={handleGroupingChange} value={grouping}>

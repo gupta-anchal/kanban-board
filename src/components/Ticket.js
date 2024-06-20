@@ -17,14 +17,19 @@ const Ticket = ({ ticket, grouping }) => {
     return (
       <div className="card-content">
         <div className="card-main">
-          <p className="ticket-id">{ticket.id}</p>
-          <h4>{ticket.title}</h4>
-          <img
-            src={priorityIcons[ticket.priority].icon}
-            alt="Priority Icon"
-            className="priority-icon"
-          />
-          <p className="ticket-tag">{ticket.tag.join(", ")}</p>
+          <span className="ticket-id">{ticket.id}</span>
+          <div className="card-title">{ticket.title}</div>
+          <div className="card-stats">
+            <img
+              src={priorityIcons[ticket.priority].icon}
+              alt="Priority Icon"
+              className="priority-icon"
+            />
+            <span className="ticket-tag">
+              <span class="dot"></span>
+              {ticket.tag.join(", ")}
+            </span>
+          </div>
         </div>
         <div className="card-avatar">
           <img
@@ -39,14 +44,21 @@ const Ticket = ({ ticket, grouping }) => {
     return (
       <div className="card-content">
         <div className="card-main">
-          <p className="ticket-id">{ticket.id}</p>
-          <h4>{ticket.title}</h4>
-          <img
-            src={statusIcons[ticket.status]?.icon}
-            alt="Status Icon"
-            className="status-icon"
-          />
-          <p className="ticket-tag">{ticket.tag.join(", ")}</p>
+          <span className="ticket-id">{ticket.id}</span>
+          <div className="card-title">
+            <img
+              src={statusIcons[ticket.status].icon}
+              alt="Status Icon"
+              className="status-icon"
+            />
+            {ticket.title}
+          </div>
+          <div className="card-stats">
+            <span className="ticket-tag">
+              <span class="dot"></span>
+              {ticket.tag.join(", ")}
+            </span>
+          </div>
         </div>
         <div className="card-avatar">
           <img
@@ -61,19 +73,26 @@ const Ticket = ({ ticket, grouping }) => {
     console.log("grouping is user");
     return (
       <div className="card-content single-column">
-        <p className="ticket-id">{ticket.id}</p>
-        <h4>{ticket.title}</h4>
-        <img
-          src={statusIcons[ticket.status]?.icon}
-          alt="Status Icon"
-          className="status-icon"
-        />
-        <img
-          src={priorityIcons[ticket.priority].icon}
-          alt="Priority Icon"
-          className="priority-icon"
-        />
-        <p className="ticket-tag">{ticket.tag.join(", ")}</p>
+        <span className="ticket-id">{ticket.id}</span>
+        <div className="card-title">
+          <img
+            src={statusIcons[ticket.status].icon}
+            alt="Status Icon"
+            className="status-icon"
+          />
+          {ticket.title}
+        </div>
+        <div className="card-stats">
+          <img
+            src={priorityIcons[ticket.priority].icon}
+            alt="Priority Icon"
+            className="priority-icon"
+          />
+          <span className="ticket-tag">
+            <span class="dot"></span>
+            {ticket.tag.join(", ")}
+          </span>
+        </div>
       </div>
     );
   }
