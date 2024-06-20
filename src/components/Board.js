@@ -1,12 +1,20 @@
-// src/components/KanbanBoard.jsx
-import React, { useEffect, useState } from 'react';
-import { fetchTickets } from '../utils/api';
-import '../styles/kanbanBoard.css';
+import React, { useEffect, useState } from "react";
+import { fetchTickets } from "../utils/api";
+import "../styles/kanbanBoard.css";
+import DisplayFilterComponent from "./Filter/DisplayFilterComponent";
+import Ticket from "./ticket";
+import { BoardHeader } from "./boardHeader";
+
+const statusOrder = ["Backlog", "Todo", "In progress", "Done", "Cancelled"];
 
 const KanbanBoard = () => {
   const [tickets, setTickets] = useState([]);
-  const [grouping, setGrouping] = useState(localStorage.getItem('grouping') || 'status');
-  const [sorting, setSorting] = useState(localStorage.getItem('sorting') || 'priority');
+  const [grouping, setGrouping] = useState(
+    localStorage.getItem("grouping") || "status"
+  );
+  const [sorting, setSorting] = useState(
+    localStorage.getItem("sorting") || "priority"
+  );
 
   useEffect(() => {
     const getTickets = async () => {
@@ -18,11 +26,11 @@ const KanbanBoard = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('grouping', grouping);
+    localStorage.setItem("grouping", grouping);
   }, [grouping]);
 
   useEffect(() => {
-    localStorage.setItem('sorting', sorting);
+    localStorage.setItem("sorting", sorting);
   }, [sorting]);
 
   const groupBy = (tickets, key) => {
@@ -33,9 +41,9 @@ const KanbanBoard = () => {
   };
 
   const sortedTickets = [...tickets].sort((a, b) => {
-    if (sorting === 'priority') {
+    if (sorting === "priority") {
       return b.priority - a.priority;
-    } else if (sorting === 'title') {
+    } else if (sorting === "title") {
       return a.title.localeCompare(b.title);
     }
     return 0;
@@ -46,25 +54,43 @@ const KanbanBoard = () => {
   return (
     <div className="kanban-board">
       <div className="controls">
-        <button onClick={() => setGrouping('status')}>Group by Status</button>
-        <button onClick={() => setGrouping('userId')}>Group by User</button>
-        <button onClick={() => setGrouping('priority')}>Group by Priority</button>
-        <button onClick={() => setSorting('priority')}>Sort by Priority</button>
-        <button onClick={() => setSorting('title')}>Sort by Title</button>
+        <DisplayFilterComponent
+          setGrouping={setGrouping}
+          setSorting={setSorting}
+        />
       </div>
       <div className="columns">
-        {Object.keys(groupedTickets).map(group => (
-          <div key={group} className="column">
-            <h3>{group}</h3>
-            {groupedTickets[group].map(ticket => (
-              <div key={ticket.id} className="ticket">
-                <h4>{ticket.title}</h4>
-                <p>{ticket.tag.join(', ')}</p>
-                <p>Priority: {ticket.priority}</p>
-              </div>
-            ))}
-          </div>
-        ))}
+        {grouping === "status" &&
+          statusOrder.map((status) => (
+            <div key={status} className="column">
+              <BoardHeader
+                group={status}
+                count={
+                  groupedTickets[status] ? groupedTickets[status].length : 0
+                }
+              />
+              {groupedTickets[status] && groupedTickets[status].length > 0 ? (
+                groupedTickets[status].map((ticket) => (
+                  <div key={ticket.id} className="ticket">
+                    <Ticket ticket={ticket} grouping={grouping} />
+                  </div>
+                ))
+              ) : (
+                <div className="ticket-placeholder"></div>
+              )}
+            </div>
+          ))}
+        {grouping !== "status" &&
+          Object.keys(groupedTickets).map((group) => (
+            <div key={group} className="column">
+              <BoardHeader group={group} count={groupedTickets[group].length} />
+              {groupedTickets[group].map((ticket) => (
+                <div key={ticket.id} className="ticket">
+                  <Ticket ticket={ticket} grouping={grouping} />
+                </div>
+              ))}
+            </div>
+          ))}
       </div>
     </div>
   );
