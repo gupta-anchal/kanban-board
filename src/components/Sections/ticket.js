@@ -1,7 +1,7 @@
 import React from "react";
-import priorityIcons from "../assets/priorityIcons";
-import statusIcons from "../assets/statusIcons";
-import { generateInitials } from "../utils/generateInitials";
+import priorityIcons from "../../assets/priorityIcons";
+import statusIcons from "../../assets/statusIcons";
+import { generateInitials } from "../../utils/generateInitials";
 
 const Ticket = ({ ticket, grouping, userName }) => {
 

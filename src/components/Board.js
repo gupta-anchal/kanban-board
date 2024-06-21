@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { fetchTickets, fetchUsers } from "../utils/api";
 import "../styles/kanbanBoard.css";
 import DisplayFilterComponent from "./Filter/DisplayFilterComponent";
-import Ticket from "./ticket";
-import { BoardHeader } from "./boardHeader";
+import Ticket from "./Sections/ticket";
+import { BoardHeader } from "./Sections/boardHeader";
 
 const statusOrder = ["Backlog", "Todo", "In progress", "Done", "Cancelled"];
 

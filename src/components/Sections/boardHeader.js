@@ -1,9 +1,9 @@
 import React from "react";
-import statusIcons from "../assets/statusIcons";
-import priorityIcons from "../assets/priorityIcons";
-import addIcon from "../assets/add.svg";
-import menuIcon from "../assets/3_dot_menu.svg";
-import { generateInitials } from "../utils/generateInitials";
+import statusIcons from "../../assets/statusIcons";
+import priorityIcons from "../../assets/priorityIcons";
+import addIcon from "../../assets/add.svg";
+import menuIcon from "../../assets/3_dot_menu.svg";
+import { generateInitials } from "../../utils/generateInitials";
 
 export const BoardHeader = ({ group, count }) => {
 
