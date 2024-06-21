@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchTickets } from "../utils/api";
+import { fetchTickets, fetchUsers } from "../utils/api";
 import "../styles/kanbanBoard.css";
 import DisplayFilterComponent from "./Filter/DisplayFilterComponent";
 import Ticket from "./ticket";
@@ -9,6 +9,7 @@ const statusOrder = ["Backlog", "Todo", "In progress", "Done", "Cancelled"];
 
 const KanbanBoard = () => {
   const [tickets, setTickets] = useState([]);
+  const [users, setUsers] = useState([]);
   const [grouping, setGrouping] = useState(
     localStorage.getItem("grouping") || "status"
   );
@@ -17,12 +18,14 @@ const KanbanBoard = () => {
   );
 
   useEffect(() => {
-    const getTickets = async () => {
-      const data = await fetchTickets();
-      setTickets(data);
+    const getData = async () => {
+      const ticketsData = await fetchTickets();
+      const usersData = await fetchUsers();
+      setTickets(ticketsData);
+      setUsers(usersData);
     };
 
-    getTickets();
+    getData();
   }, []);
 
   useEffect(() => {
@@ -51,6 +54,11 @@ const KanbanBoard = () => {
 
   const groupedTickets = groupBy(sortedTickets, grouping);
 
+  const getUserById = (userId) => {
+    const user = users.find((user) => user.id === userId);
+    return user ? user.name : userId;
+  };
+
   return (
     <div className="kanban-board">
       <div className="controls">
@@ -72,7 +80,7 @@ const KanbanBoard = () => {
               {groupedTickets[status] && groupedTickets[status].length > 0 ? (
                 groupedTickets[status].map((ticket) => (
                   <div key={ticket.id} className="ticket">
-                    <Ticket ticket={ticket} grouping={grouping} />
+                    <Ticket ticket={ticket} grouping={grouping} userName={getUserById(ticket.userId)}/>
                   </div>
                 ))
               ) : (
@@ -80,13 +88,27 @@ const KanbanBoard = () => {
               )}
             </div>
           ))}
-        {grouping !== "status" &&
+        {grouping === "userId" &&
+          Object.keys(groupedTickets).map((group) => (
+            <div key={group} className="column">
+              <BoardHeader
+                group={grouping === "userId" ? getUserById(group) : group}
+                count={groupedTickets[group].length}
+              />
+              {groupedTickets[group].map((ticket) => (
+                <div key={ticket.id} className="ticket">
+                  <Ticket ticket={ticket} grouping={grouping} />
+                </div>
+              ))}
+            </div>
+          ))}
+        {grouping === "priority" &&
           Object.keys(groupedTickets).map((group) => (
             <div key={group} className="column">
               <BoardHeader group={group} count={groupedTickets[group].length} />
               {groupedTickets[group].map((ticket) => (
                 <div key={ticket.id} className="ticket">
-                  <Ticket ticket={ticket} grouping={grouping} />
+                  <Ticket ticket={ticket} grouping={grouping} userName={getUserById(ticket.userId)}/>
                 </div>
               ))}
             </div>

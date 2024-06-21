@@ -1,17 +1,9 @@
 import React from "react";
 import priorityIcons from "../assets/priorityIcons";
 import statusIcons from "../assets/statusIcons";
-import user1Avatar from "../assets/user1.svg";
-import user2Avatar from "../assets/user2.svg";
+import { generateInitials } from "../utils/generateInitials";
 
-const Ticket = ({ ticket, grouping }) => {
-  const userAvatars = {
-    "usr-1": user1Avatar,
-    "usr-2": user2Avatar,
-    "usr-3": user2Avatar,
-    "usr-4": user2Avatar,
-    "usr-5": user1Avatar,
-  };
+const Ticket = ({ ticket, grouping, userName }) => {
 
   if (grouping === "status") {
     return (
@@ -32,11 +24,7 @@ const Ticket = ({ ticket, grouping }) => {
           </div>
         </div>
         <div className="card-avatar">
-          <img
-            src={userAvatars[ticket.userId]}
-            alt="User Avatar"
-            className="avatar"
-          />
+          <div className="user-avatar">{generateInitials(userName)}</div>
         </div>
       </div>
     );
@@ -61,16 +49,11 @@ const Ticket = ({ ticket, grouping }) => {
           </div>
         </div>
         <div className="card-avatar">
-          <img
-            src={userAvatars[ticket.userId]}
-            alt="User Avatar"
-            className="avatar"
-          />
+          <div className="user-avatar">{generateInitials(userName)}</div>
         </div>
       </div>
     );
   } else if (grouping === "userId") {
-    console.log("grouping is user");
     return (
       <div className="card-content single-column">
         <span className="ticket-id">{ticket.id}</span>
